@@ -7,6 +7,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from unityagents import UnityEnvironment
+import matplotlib.pyplot as plt
+
 
 env = UnityEnvironment(file_name="Banana.app")
 
@@ -14,7 +16,7 @@ brain_name = env.brain_names[0]
 brain = env.brains[brain_name]
 
 BUFFER_SIZE = int(1e5)  # replay buffer size
-BATCH_SIZE = 64  # minibatch size
+BATCH_SIZE = 64  # mini-batch size
 GAMMA = 0.99  # discount factor
 TAU = 1e-3  # for soft update of target parameters
 LR = 5e-4  # learning rate
@@ -218,7 +220,7 @@ for i_episode in range(1, num_episodes+1):
     state = env_info.vector_observations[0]             # Get the current state
     score = 0                                           # Set the score to 0 before the episode begins
     while True:
-        action = int(agent.act(state, epsilon=0))            # The agent selects an action
+        action = int(agent.act(state, epsilon=0))       # The agent selects an action
         env_info = env.step(action)[brain_name]         # Take chosen action in the environment
         next_state = env_info.vector_observations[0]    # Get the next state from the environment
         reward = env_info.rewards[0]                    # Get the reward for taking selected action
@@ -230,4 +232,10 @@ for i_episode in range(1, num_episodes+1):
             print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores)))
             break
 
-env.close()
+fig = plt.figure()                              # Plotting the graph showing the increase in Q-Value as
+plt.xlabel('Episodes')                          # we progress through more episodes and gain more experience
+plt.ylabel('Scores')
+plt.plot(np.arange(len(scores)), scores)
+plt.show()
+
+env.close()                                             # Close the environment once you're done
