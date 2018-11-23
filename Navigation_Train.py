@@ -1,5 +1,4 @@
 import numpy as np
-import gym
 import random
 from collections import deque, namedtuple
 import torch
@@ -7,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from unityagents import UnityEnvironment
-import matplotlib.pyplot as plt
+import  matplotlib.pyplot as plt
 
 
 env = UnityEnvironment(file_name="Banana.app")
@@ -16,11 +15,11 @@ brain_name = env.brain_names[0]
 brain = env.brains[brain_name]
 
 BUFFER_SIZE = int(1e5)  # replay buffer size
-BATCH_SIZE = 64  # mini-batch size
-GAMMA = 0.99  # discount factor
-TAU = 1e-3  # for soft update of target parameters
-LR = 5e-4  # learning rate
-UPDATE_EVERY = 4  # how often to update the network
+BATCH_SIZE = 64         # mini-batch size
+GAMMA = 0.99            # discount factor
+TAU = 1e-3              # for soft update of target parameters
+LR = 5e-4               # learning rate
+UPDATE_EVERY = 4        # how often to update the network
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -151,7 +150,6 @@ class Agent:
         self.optimizer.step()
 
         # update target network
-
         self.soft_update(self.qnetwork_local, self.qnetwork_target, TAU)
 
     def soft_update(self, local_model, target_model, tau):
@@ -208,29 +206,51 @@ class ReplayBuffer:
 
 agent = Agent(state_size=state_size, action_size=action_size, seed=0)
 
-# Loading the trained agent's weights from checkpoint.pth
-checkpoint = 'checkpoint.pth'
-agent.qnetwork_local.load_state_dict(torch.load(checkpoint))
+def dqn(n_episodes = 2000, max_t=1000, epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=0.98):
+    """Deep Q-Learning
 
-num_episodes = 10                                       # We're gonna test for a total of 10 episodes
-score = 0
-scores = []                                             # This keeps track of the scores over all episodes
-for i_episode in range(1, num_episodes+1):
-    env_info = env.reset(train_mode=False)[brain_name]  # Reset environment to start from the beginning
-    state = env_info.vector_observations[0]             # Get the current state
-    score = 0                                           # Set the score to 0 before the episode begins
-    while True:
-        action = int(agent.act(state, epsilon=0))       # The agent selects an action
-        env_info = env.step(action)[brain_name]         # Take chosen action in the environment
-        next_state = env_info.vector_observations[0]    # Get the next state from the environment
-        reward = env_info.rewards[0]                    # Get the reward for taking selected action
-        done = env_info.local_done[0]                   # Check to see if the episode has terminated or completed
-        score += reward
-        state = next_state                              # Set the state as the new_state or current state of the env
-        if done:                                        # Break the loop after the episode has completed
-            scores.append(score)                        # Get the scores when the episode ends
-            print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores)))
+    Params:
+        n_episodes (int): maximum number of training episodes
+        max_t (int): maximum number of time-steps per episode
+        epsilon_start (float): starting value of epsilon, for epsilon-greedy action selection
+        epsilon_end (float): minimum value of epsilon
+        epsilon_decay (float): multiplicative factor (per episode) for decreasing epsilon"""
+
+    scores = []
+    scores_window = deque(maxlen=100)
+    epsilon = epsilon_start
+
+    for i_episode in range(1, n_episodes+1):
+        env_info = env.reset(train_mode=True)[brain_name]           # Reset environment to start from the beginning
+        state = env_info.vector_observations[0]                     # Get the current state
+        score = 0                                                   # Set the score to 0 before the episode begins
+        for t in range(max_t):
+            action = int(agent.act(state, epsilon))                 # The agent selects an action
+            env_info = env.step(action)[brain_name]                 # Take chosen action in the environment
+            next_state = env_info.vector_observations[0]            # Get the next state from the environment
+            reward = env_info.rewards[0]                            # Get the reward for taking selected action
+            done = env_info.local_done[0]                           # Check to see if the episode has terminated or completed
+            agent.step(state, action, reward, next_state, done)     # The agent learns from a sampled set of experiences
+            state = next_state                                      # Set the state as the new_state or current state of the env
+            score +=reward                                          # Update the scores based on rewards
+            if done:
+                break                                               # Break the loop after the episode has completed
+        scores_window.append(score)
+        scores.append(score)
+        epsilon = max(epsilon_end, epsilon*epsilon_decay)
+        print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window), end=""))
+        if i_episode % 100 == 0:
+            print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)))
+        if np.mean(scores_window)>=13.0:
+            # Once the episode has been solved, store the weights in a file
+            # This allows us to use the trained agent to test with later on without having to retrain it every time
+            print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_window)))
+            torch.save(agent.qnetwork_local.state_dict(), 'checkpoint.pth')
             break
+
+    return scores
+
+scores = dqn()
 
 fig = plt.figure()                              # Plotting the graph showing the increase in Q-Value as
 plt.xlabel('Episodes')                          # we progress through more episodes and gain more experience
@@ -238,4 +258,5 @@ plt.ylabel('Scores')
 plt.plot(np.arange(len(scores)), scores)
 plt.show()
 
-env.close()                                             # Close the environment once you're done
+
+env.close()                                     # Close the environment once you're done
