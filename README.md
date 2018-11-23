@@ -3,9 +3,9 @@ Udacity Deep Reinforcement Nanodegree - Project 1 (Navigation)
 
 In this project, we will train a Deep Q-Network (DQN) agent to try and solve Unity's Banana Collector environment.
 
-# Environment Description
+### Environment Description
 
-https://user-images.githubusercontent.com/10624937/42135619-d90f2f28-7d12-11e8-8823-82b970a54d7e.gif
+[image1]: https://user-images.githubusercontent.com/10624937/42135619-d90f2f28-7d12-11e8-8823-82b970a54d7e.gif
 
 A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana. Thus, the goal of our agent is to collect as many yellow bananas as possible while avoiding blue bananas.
 
