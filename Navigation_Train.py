@@ -1,5 +1,4 @@
 import numpy as np
-import gym
 import random
 from collections import deque, namedtuple
 import torch
@@ -7,6 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from unityagents import UnityEnvironment
+import  matplotlib.pyplot as plt
+
 
 env = UnityEnvironment(file_name="Banana.app")
 
@@ -14,11 +15,11 @@ brain_name = env.brain_names[0]
 brain = env.brains[brain_name]
 
 BUFFER_SIZE = int(1e5)  # replay buffer size
-BATCH_SIZE = 64  # minibatch size
-GAMMA = 0.99  # discount factor
-TAU = 1e-3  # for soft update of target parameters
-LR = 5e-4  # learning rate
-UPDATE_EVERY = 4  # how often to update the network
+BATCH_SIZE = 64         # mini-batch size
+GAMMA = 0.99            # discount factor
+TAU = 1e-3              # for soft update of target parameters
+LR = 5e-4               # learning rate
+UPDATE_EVERY = 4        # how often to update the network
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -149,7 +150,6 @@ class Agent:
         self.optimizer.step()
 
         # update target network
-
         self.soft_update(self.qnetwork_local, self.qnetwork_target, TAU)
 
     def soft_update(self, local_model, target_model, tau):
@@ -211,7 +211,7 @@ def dqn(n_episodes = 2000, max_t=1000, epsilon_start=1.0, epsilon_end=0.01, epsi
 
     Params:
         n_episodes (int): maximum number of training episodes
-        max_t (int): maximum number of timesteps per episode
+        max_t (int): maximum number of time-steps per episode
         epsilon_start (float): starting value of epsilon, for epsilon-greedy action selection
         epsilon_end (float): minimum value of epsilon
         epsilon_decay (float): multiplicative factor (per episode) for decreasing epsilon"""
@@ -242,6 +242,8 @@ def dqn(n_episodes = 2000, max_t=1000, epsilon_start=1.0, epsilon_end=0.01, epsi
         if i_episode % 100 == 0:
             print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window)))
         if np.mean(scores_window)>=13.0:
+            # Once the episode has been solved, store the weights in a file
+            # This allows us to use the trained agent to test with later on without having to retrain it every time
             print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_window)))
             torch.save(agent.qnetwork_local.state_dict(), 'checkpoint.pth')
             break
@@ -250,4 +252,11 @@ def dqn(n_episodes = 2000, max_t=1000, epsilon_start=1.0, epsilon_end=0.01, epsi
 
 scores = dqn()
 
-env.close()
+fig = plt.figure()                              # Plotting the graph showing the increase in Q-Value as
+plt.xlabel('Episodes')                          # we progress through more episodes and gain more experience
+plt.ylabel('Scores')
+plt.plot(np.arange(len(scores)), scores)
+plt.show()
+
+
+env.close()                                     # Close the environment once you're done
