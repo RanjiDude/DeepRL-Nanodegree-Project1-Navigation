@@ -5,7 +5,7 @@ In this project, we will train a Deep Q-Network (DQN) agent to try and solve Uni
 
 ### Environment Description
 
-[image1]: https://user-images.githubusercontent.com/10624937/42135619-d90f2f28-7d12-11e8-8823-82b970a54d7e.gif
+<img src="images/trained_agent.gif" width="50%" align="top-left" alt="" title="Banana Collector" />
 
 A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana. Thus, the goal of our agent is to collect as many yellow bananas as possible while avoiding blue bananas.
 
