@@ -15,4 +15,14 @@ The state space has 37 dimensions and contains the agent's velocity, along with 
 1 - move backward.
 2 - turn left.
 3 - turn right.
-The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
+The task is episodic, and in order to solve the environment, our agent must get an average score of +13 over 100 consecutive episodes.
+
+### Download Instructions
+
+Here are the instructions to follow if you'd like to try out this agent on your machine. First, you'll need at least Python 3.6 installed on your system. You will also need these libraries to help run the code. Most of these can be installed using the pip install command on your terminal once Python has been installed.
+
+numpy - NumPy is the fundamental package for scientific computing with Python
+collections - High-performance container datatypes
+torch - PyTorch is an optimized tensor library for deep learning using GPUs and CPUs
+unityagents - Unity Machine Learning Agents allows researchers and developers to transform games and simulations created using the Unity Editor into environments where intelligent agents can be trained using reinforcement learning, evolutionary strategies, or other machine learning methods through a simple to use Python API
+
