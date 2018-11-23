@@ -36,7 +36,7 @@ Here are the instructions to follow if you'd like to try out this agent on your 
 
     (_For AWS_) If you'd like to train the agent on AWS (and have not [enabled a virtual screen](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md)), then please use [this link](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux_NoVis.zip) to obtain the environment.
 
-2. Place the file in the DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file.
+2. Place the file in a folder, and unzip (or decompress) the file. The environment and the agent's training code have to be in the same path. If you'd like to store the environment in a different path, that needs to be udpated in the 'Navigation_Train.py' and 'Navigation_Test.py' files accordingly.
 
 ### File descriptions
 
@@ -49,8 +49,7 @@ The repo contains three main files:
 
 ### How to run the code?
 
-- Clone/download the three files listed above and add them in the same folder as the Banana Collector environment on your machine. You can run the code using a terminal like Anaconda Prompt or anything that can run python commands. 
-- Once you navigate to the folder where the project files are located using the 'cd' command, run either the 'Navigation_Train.py' file if you'd like to train the agent.
-- Else run the 'Navigation_Test.py' file if you would like to see a pretrained agent in action.
+- Clone/download the three files listed above and add them in the same folder as the Banana Collector environment on your machine. You can run the code using a terminal like Anaconda Prompt or anything that can run python commands like 'pip'. 
+- Once you navigate to the folder where the project files are located using the 'cd' command, run either the 'Navigation_Train.py' file if you'd like to train the agent or the 'Navigation_Test.py' file if you would like to see a pretrained agent in action!
 
 Please refer to the Report.md file if you'd like an in-depth look of the architecture
