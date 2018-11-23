@@ -221,20 +221,20 @@ def dqn(n_episodes = 2000, max_t=1000, epsilon_start=1.0, epsilon_end=0.01, epsi
     epsilon = epsilon_start
 
     for i_episode in range(1, n_episodes+1):
-        env_info = env.reset(train_mode=True)[brain_name]
-        state = env_info.vector_observations[0]
-        score = 0
+        env_info = env.reset(train_mode=True)[brain_name]           # Reset environment to start from the beginning
+        state = env_info.vector_observations[0]                     # Get the current state
+        score = 0                                                   # Set the score to 0 before the episode begins
         for t in range(max_t):
-            action = int(agent.act(state, epsilon))
-            env_info = env.step(action)[brain_name]
-            next_state = env_info.vector_observations[0]
-            reward = env_info.rewards[0]
-            done = env_info.local_done[0]
-            agent.step(state, action, reward, next_state, done)
-            state = next_state
-            score +=reward
+            action = int(agent.act(state, epsilon))                 # The agent selects an action
+            env_info = env.step(action)[brain_name]                 # Take chosen action in the environment
+            next_state = env_info.vector_observations[0]            # Get the next state from the environment
+            reward = env_info.rewards[0]                            # Get the reward for taking selected action
+            done = env_info.local_done[0]                           # Check to see if the episode has terminated or completed
+            agent.step(state, action, reward, next_state, done)     # The agent learns from a sampled set of experiences
+            state = next_state                                      # Set the state as the new_state or current state of the env
+            score +=reward                                          # Update the scores based on rewards
             if done:
-                break
+                break                                               # Break the loop after the episode has completed
         scores_window.append(score)
         scores.append(score)
         epsilon = max(epsilon_end, epsilon*epsilon_decay)
