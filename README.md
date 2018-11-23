@@ -1,5 +1,4 @@
 # DeepRL-Nanodegree-Project1 (Navigation)
-Udacity Deep Reinforcement Nanodegree - Project 1 (Navigation)
 
 In this project, we will train a Deep Q-Network (DQN) agent to try and solve Unity's Banana Collector environment.
 
@@ -24,7 +23,8 @@ Here are the instructions to follow if you'd like to try out this agent on your 
 1. numpy - NumPy is the fundamental package for scientific computing with Python
 1. collections - High-performance container datatypes
 1. torch - PyTorch is an optimized tensor library for deep learning using GPUs and CPUs
-1. unityagents - Unity Machine Learning Agents allows researchers and developers to transform games and simulations created using the Unity                  Editor into environments where intelligent agents can be trained using reinforcement learning, evolutionary strategies, or                  other machine learning methods through a simple to use Python API
+1. unityagents - Unity Machine Learning Agents allows researchers and developers to transform games and simulations created using the Unity Editor into environments where intelligent agents can be trained using reinforcement learning, evolutionary strategies, or other machine learning methods through a simple to use Python API
+1. matplotlib.pyplot - Provides a MATLAB-like plotting framework
 
 1. Download the environment from one of the links below.  You need only select the environment that matches your operating system:
     - Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux.zip)
@@ -37,3 +37,20 @@ Here are the instructions to follow if you'd like to try out this agent on your 
     (_For AWS_) If you'd like to train the agent on AWS (and have not [enabled a virtual screen](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md)), then please use [this link](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux_NoVis.zip) to obtain the environment.
 
 2. Place the file in the DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file.
+
+### File descriptions
+
+The repo contains three main files:
+1. Navigation_Train.py - This file, written in Python 3.6 with the help of the PyTorch framework contains the agent and the model that we use to train the agent with. It runs until the agent has solved the environment which can vary between 200-300 episodes depending on the hyperparameter selection.
+
+1. Navigation_Test.py - This file, also written in Python 3.6 has the code to test the trained agent with. It runs for a total of 10 episodes and plots the performance in each one of them.
+
+1. checkpoint.pth - This file is where the trained agent's DQN weights are stored. You may use this file if you'd like to use the pretrained agent to solve the Banana collector environment. This file also gets recreated every time you run the Navigation_Train.py file. So you can create your own checkpoint.pth file with your choice of hyperparameters!
+
+### How to run the code?
+
+- Clone/download the three files listed above and add them in the same folder as the Banana Collector environment on your machine. You can run the code using a terminal like Anaconda Prompt or anything that can run python commands. 
+- Once you navigate to the folder where the project files are located using the 'cd' command, run either the 'Navigation_Train.py' file if you'd like to train the agent.
+- Else run the 'Navigation_Test.py' file if you would like to see a pretrained agent in action.
+
+Please refer to the Report.md file if you'd like an in-depth look of the architecture
